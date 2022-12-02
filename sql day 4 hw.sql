@@ -16,30 +16,16 @@ WHERE amount > 6.99
 ORDER BY amount desc
 
 --3. Show all customers names who have made payments over $175(use subqueries)
-----------------------------
-SELECT first_name, last_name, sum(amount)
-FROM customer  
-JOIN payment 
-ON payment.payment_id = customer.customer_id
-GROUP BY sum(amount)
-WHERE amount > (
-	SELECT sum(amount)
-	FROM payment 
-	JOIN customer 
-	ON customer.customer_id = payment.payment_id
-	GROUP BY customer_id 
-	HAVING sum(amount) = 175
-	
-	)
 
-	
-SELECT sum(amount)
-FROM payment 
-JOIN customer 
-ON customer.customer_id = payment.payment_id
-GROUP BY customer.customer_id 
-HAVING sum(amount) = 175
 
+SELECT *
+FROM customer 
+WHERE customer_id IN (
+	SELECT customer_id
+	FROM payment
+	GROUP BY customer_id
+	HAVING sum(amount) >175
+)
 
 --4. List all customers that live in Nepal (use the city table)
 
